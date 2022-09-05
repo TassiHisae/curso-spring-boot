@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Detalhes</title>
+</head>
+<body>
+<h1>Evento</h1>
+<h3><a class="waves-effect waves-light btn-small" href="/eventos"><i class="material-icons left">dehaze</i>Lista de Eventos</a></h3>
+
+<div th:each="evento : ${evento}" class="container">
+    <div class="row">
+        <p>Nome: <span th:text="${evento.nome}"></span></p>
+        <p>Local: <span th:text="${evento.local}"></span></p>
+        <p>Data: <span th:text="${evento.data}"></span></p>
+        <p>Horário: <span th:text="${evento.horario}"></span></p>
+    </div>
+
+    <form method="post">
+        Nome: <input type="text" value="" name="nomeConvidado"/>
+        RG: <input type="text" value="" name="rg"/>
+        <button class="waves-effect waves-light btn-small" type="submit">Adicionar Convidado</button>
+    </form>
+</div>
+<h5>Lista Convidados: </h5>
+<div class="container" th:each="convidado : ${convidados}">
+    <div class="row">
+        <div class="input-field col s6">
+            <p><span th:text="${convidado.nomeConvidado}"></span></p>
+        </div>
+        <div class="input-field col s3">
+            <p><span th:text="${convidado.rg}"></span></p>
+        </div>
+    </div>
+</div>
+
+<!--JavaScript at end of body for optimized loading-->
+<script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+</html>
