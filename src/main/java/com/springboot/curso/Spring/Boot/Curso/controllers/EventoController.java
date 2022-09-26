@@ -6,10 +6,14 @@ import com.springboot.curso.Spring.Boot.Curso.repository.ConvidadoRepository;
 import com.springboot.curso.Spring.Boot.Curso.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 public class EventoController {
@@ -26,8 +30,14 @@ public class EventoController {
     }
 
     @PostMapping("/cadastrarEvento")
-    public String form(Evento evento){
+    public String form(@Valid Evento evento, BindingResult result, RedirectAttributes attributes){
+        if (result.hasErrors()){
+            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
+            return "redirect:/cadastrarEvento";
+        }
+
         eventoRepository.save(evento);
+        attributes.addFlashAttribute("mensagem", "Evento cadastrado com sucesso!");
         return "redirect:/cadastrarEvento";
     }
 
@@ -52,10 +62,15 @@ public class EventoController {
     }
 
     @PostMapping("/{codigo}")
-    public String detalhesEvento(@PathVariable("codigo") long codigo, Convidado convidado){
+    public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado, BindingResult result, RedirectAttributes attributes){
+        if (result.hasErrors()){
+            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
+            return "redirect:/{codigo}";
+        }
         Evento evento = eventoRepository.findByCodigo(codigo);
         convidado.setEvento(evento);
         convidadoRepository.save(convidado);
+        attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
         return "redirect:/{codigo}";
     }
 }
