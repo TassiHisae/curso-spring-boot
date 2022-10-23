@@ -7,9 +7,7 @@ import com.springboot.curso.Spring.Boot.Curso.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -72,5 +70,21 @@ public class EventoController {
         convidadoRepository.save(convidado);
         attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
         return "redirect:/{codigo}";
+    }
+
+    @RequestMapping("/deletarEvento")
+    public String deletarEvento(long codigo){
+        Evento evento = eventoRepository.findByCodigo(codigo);
+        eventoRepository.delete(evento);
+        return "redirect:/eventos";
+    }
+
+    @RequestMapping("/deletarConvidado")
+    public String deletarConvidado(long rg){
+        Convidado convidado = convidadoRepository.findByRg(rg);
+        convidadoRepository.delete(convidado);
+
+        Evento evento = convidado.getEvento();
+        return "redirect:/" + evento.getCodigo();
     }
 }
